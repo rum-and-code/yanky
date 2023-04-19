@@ -20,6 +20,11 @@ program
       'X-GitHub-Api-Version': '2022-11-28',
     }
 
+    console.log('\n\x1b[32m%s\x1b[0m', "Let's Yank this!");
+    console.log('\x1b[33m%s\x1b[0m%s', "Organization: ", owner);
+    console.log('\x1b[33m%s\x1b[0m%s', "Team: ", team);
+    console.log("\nFetching repositories...");
+
     const response = await axios.get(`https://api.github.com/orgs/${owner}/repos?per_page=100`, {headers});
     if (response.status !== 200) {
       console.error(`Error: ${response.status} ${response.statusText}`);
