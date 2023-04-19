@@ -8,8 +8,6 @@ const program = new Command();
 program.version('1.0.0');
 
 program
-  .command('list')
-  .description('List pull requests for a team')
   .action(async () => {
     const owner = process.env.OWNER;
     const team = process.env.TEAM_SLUG;
