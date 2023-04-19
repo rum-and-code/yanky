@@ -7,7 +7,7 @@ We recommend managing the environment with a `.envrc` file and using `direnv`. Y
 ### Required environment variables are:
 - OWNER: GitHub organization name
 - TOKEN: Your personal access token (see below)
-- TEAM: GitHub team name (will be snake-case with no accents, so "Les Très Émus 4" would be `les-tres-emus-4`)
+- TEAM_SLUG: GitHub team name (will be snake-case with no accents, so "Les Très Émus 4" would be `les-tres-emus-4`)
 
 ### Optional
 

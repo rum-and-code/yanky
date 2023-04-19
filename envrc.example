@@ -1,3 +1,4 @@
 export OWNER=
 export TOKEN=
-export TEAM=
+export TEAM_SLUG=
+export EXCLUDE_BOTS=true
