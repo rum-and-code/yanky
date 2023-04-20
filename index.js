@@ -1,19 +1,16 @@
 const axios = require('axios');
 const { Command } = require('commander');
+const program = new Command();
 const dotenv = require('dotenv');
 
 dotenv.config();
-
-const program = new Command();
 program.version('1.0.0');
-
 program
   .action(async () => {
     const owner = process.env.OWNER;
     const team = process.env.TEAM_SLUG;
     const token = process.env.TOKEN;
     const excludeBots = (process.env.EXCLUDE_BOTS && process.env.EXCLUDE_BOTS != 'false') || true;
-
     const headers = {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/vnd.github+json',
@@ -43,7 +40,7 @@ program
       return teamNames.includes(team);
     }
 
-    async function filterAsync(array, filterFunc) {
+    const filterAsync = async (array, filterFunc) => {
       const results = await Promise.all(array.map(filterFunc));
       return array.filter((_v, i) => results[i]);
     }
@@ -54,7 +51,7 @@ program
         console.error(`Error: ${response.status} ${response.statusText}`);
         process.exit(1);
       }
-      const results = response.data
+      return response.data
       .filter((pr) => {
         if (excludeBots) {
           return pr.user.type !== 'Bot';
@@ -62,28 +59,43 @@ program
           return true;
         }
       })
-      .map((pr) => {
-        return {
-          title: pr.title,
-          url: pr._links.html.href,
-        }
-      });
-      return results;
+    }
+
+    const enhancePullRequestWithReview = async (pullRequest) => {;
+      const { number, head: { repo: { name } } } = pullRequest;
+      const response = await axios.get(`https://api.github.com/repos/${owner}/${name}/pulls/${number}/reviews`, {headers});
+      if (response.status !== 200) {
+        console.error(`Error: ${response.status} ${response.statusText}`);
+        process.exit(1);
+      }
+      const results = response.data
+      const reviewStates = results.map((review) => review.state);
+      return { ...pullRequest, reviewStates };
     }
 
     filterAsync(repoNames, filterByTeam)
-    .then(async (result) => {
-      console.log("Found", result.length, "repositories for team", team);
-      console.log("\n\n");
-      const repoPullRequests = await Promise.all(result.map(getOpenPullRequests));
-      repoPullRequests
-      .filter((pr) => pr.length > 0)
-      .forEach((pullRequests) => {
-        pullRequests.forEach((pr) => {
-          console.log('\x1b[33m%s\x1b[0m', pr.title);
-          console.log(pr.url);
-          console.log("\n");
-        });
+    .then(async (repos) => {
+      console.log("Found", repos.length, "repositories for team", team);
+      const result = await Promise.all(repos.map(getOpenPullRequests));
+      const openPullRequests = result.flat();
+      console.log("Found", openPullRequests.length, "open pull requests in these repos");
+      const openPullRequestsWithReviews = await Promise.all(openPullRequests.map(enhancePullRequestWithReview));
+      console.log("Getting reviews for these pull requests...");
+      console.log("\n");
+      openPullRequestsWithReviews
+      .forEach((pr) => {
+        if (pr.draft) {
+          console.log('\x1b[36m%s\x1b[0m (Draft)', pr.title);
+        } else if (pr.reviewStates.includes('APPROVED')) {
+          console.log('\x1b[32m%s\x1b[0m', pr.title); // green
+        } else {
+          console.log('\x1b[33m%s\x1b[0m', pr.title); // yellow
+        }
+        console.log(pr._links.html.href);
+        if (pr.reviewStates.length !== 0) {
+          console.log("Review States:", pr.reviewStates.join(', '));
+        }
+        console.log("\n");
       });
     });
   });
