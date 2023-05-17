@@ -16,7 +16,7 @@ config = toml.parse(file);
 program.version('1.0.0');
 program
   .action(async () => {
-    const { owner, team, token, exclude_bots: excludeBots } = config;
+    const { owner, team_slug: team, token, exclude_bots: excludeBots } = config;
     const headers = {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/vnd.github+json',

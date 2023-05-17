@@ -13,7 +13,7 @@ Copy `config.toml.example` to `config.toml` and supply the following parameters:
 ### Required parameters:
 - owner: GitHub organization name
 - token: Your personal access token (see below)
-- team_slug: GitHub team name (will be snake-case with no accents, so "Les Très Émus 4" would be `les-tres-emus-4`)
+- team_slug: GitHub team name (will be kebab-case with no accents, so "Les Très Émus 4" would be `les-tres-emus-4`)
 
 ### Optional parameter:
 
