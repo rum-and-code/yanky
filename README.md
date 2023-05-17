@@ -21,7 +21,7 @@ Copy `config.toml.example` to `config.toml` and supply the following parameters:
 
 ## Changes to shell environment
 
-You need to make the `yanky` directory available in your environment as `YANKY_PROJECT_PATH`. The `yanky` script is just a wrapper around `npm start` with a `--prefix` argument to tell `npm` where to find the `package.json`, etc. You will also want this directory to your path so you can run `yanky` from anywhere. In `.zshrc` (the default shell in macOS) this would involve:
+You need to make the `yanky` directory available in your environment as `YANKY_PATH`. The `yanky` script is just a wrapper around `npm start` with a `--prefix` argument to tell `npm` where to find the `package.json`, etc. You will also want this directory to your path so you can run `yanky` from anywhere. In `.zshrc` (the default shell in macOS) this would involve:
 
 ```
 export YANKY_PATH="${HOME}/<your path>/yanky"
