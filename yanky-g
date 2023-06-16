@@ -1,0 +1,3 @@
+#!/bin/bash
+
+npm --silent --prefix "$YANKY_PATH" run start-gui

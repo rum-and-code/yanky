@@ -1,8 +1,8 @@
 const { menubar } = require("menubar");
-const { app, BrowserWindow, shell } = require("electron");
+const { shell } = require("electron");
 const spawn = require("child_process").spawn;
 
-const RUN_YANKY_INTERVAL_MINUTES = 10;
+const POLLING_RATE_MINUTES = 10;
 
 const options = {
   webPreferences: {
@@ -31,7 +31,9 @@ function handleRedirect(e, url) {
 }
 
 function runYanky() {
-  const yanky = spawn("./yanky");
+  const zshFunction = `./yanky`;
+
+  const yanky = spawn("zsh", ["-c", zshFunction]);
 
   yanky.stdout.on("data", (data) => {
     console.log(`${data}`);
@@ -48,14 +50,11 @@ function runYanky() {
 
 mb.on("ready", () => {
   runYanky();
-  setInterval(runYanky, RUN_YANKY_INTERVAL_MINUTES * 1000 * 60);
+  setInterval(runYanky, POLLING_RATE_MINUTES * 1000 * 60);
 });
 
 mb.on("after-create-window", () => {
   mb.window.setHiddenInMissionControl(true);
   mb.window.setSkipTaskbar(true);
   mb.window.webContents.on("will-navigate", handleRedirect);
-  mb.window.webContents.on("did-finish-load", () => {
-    mb.window.setTitle("Yanky");
-  });
 });

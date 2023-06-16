@@ -14,30 +14,46 @@
       }
 
       body {
-        background-color: #001219;
+        background-color: #f1f5f9;
       }
 
       h1 {
-        color: #e9d8a6;
+        color: #0f172a;
         text-align: center;
       }
 
       h2 {
-        color: #005f73;
+        color: #1e293b;
+        font-weight: 500;
+        display: block;
+        padding: 0;
+        margin: 0;
+      }
+
+      svg {
+        display: inline-block;
+        vertical-align: middle;
       }
 
       ul {
         list-style-type: none;
         margin: 0;
         padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
       }
 
       a:link {
         text-decoration: none;
       }
 
+      a:hover {
+        text-decoration: underline;
+      }
+
       #open li a {
-        color: #ffb703;
+        color: #ef4444;
       }
 
       #approved li a {
@@ -53,73 +69,104 @@
       }
 
       .icon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.75rem;
+        height: 1.75rem;
       }
 
       .subtitle {
-        display: flex;
-        align-items: center;
+        display: inline-flex;
         gap: 0.5rem;
+        align-items: flex-end;
+        margin-bottom: 1rem;
+      }
+
+      .group {
+        margin: 1rem 0;
+        padding: 1rem;
+        background-color: #f8fafc;
+        border-radius: 0.5rem;
+        border: 2px solid #e2e8f0;
+      }
+
+      .checked {
+        text-decoration: line-through;
+      }
+
+      label {
+        display: grid;
+        grid-template-columns: 1.5rem 1fr;
+        gap: 1rem;
+      }
+
+      input {
+        height: 1rem;
+        width: 1rem;
       }
     </style>
     <script src="./script.js" defer></script>
   </head>
   <body>
     <h1>Yanky!</h1>
-    <div class="subtitle">
-      <h2>Open PRs (need review)</h2>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="#ffb703"
-        class="icon"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-        />
-      </svg>
+    <div id="data"></div>
+    <div class="group">
+      <div class="subtitle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="#f97316"
+          class="icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+          />
+        </svg>
+        <h2>Open PRs (need review)</h2>
+      </div>
+      <ul id="open"></ul>
     </div>
-    <ul id="open"></ul>
-    <div class="subtitle">
-      <h2>Approved PRs</h2>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="#0a9396"
-        class="icon"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
+    <div class="group">
+      <div class="subtitle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="#0a9396"
+          class="icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h2>Approved PRs</h2>
+      </div>
+      <ul id="approved"></ul>
     </div>
-    <ul id="approved"></ul>
-    <div class="subtitle">
-      <h2 class="gray">Draft PRs</h2>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="#8d99ae"
-        class="icon"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-        />
-      </svg>
+    <div class="group">
+      <div class="subtitle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="#8d99ae"
+          class="icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+          />
+        </svg>
+        <h2 class="gray">Draft PRs</h2>
+      </div>
+      <ul id="draft"></ul>
     </div>
-    <ul id="draft"></ul>
   </body>
 </html>

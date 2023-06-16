@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "start-gui": "electron gui.js",
-    "build-gui": "npx electron-packager . --platform=darwin --arch=all"
+    "start-gui": "electron gui.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +16,9 @@
     "commander": "^10.0.1",
     "menubar": "^9.3.0",
     "toml": "^3.0.0"
+  },
+  "devDependencies": {
+    "electron": "^22.0.0"
   },
   "mac": {
     "extendInfo": {
